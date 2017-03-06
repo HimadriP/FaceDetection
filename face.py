@@ -58,6 +58,38 @@ def to_skin_pixels(img):
 				skin[i][j] = 1
 	return skin
 
+# Noise Filter : Window Space ( 7 X 7 )
+
+limit = (7*7) / 2
+
+def init_space(img,row_s,column_s=0):
+        medval = 0
+        for i in range(row_s,row_s+7):
+                for j in range(column_s,column_s + 7):
+                        medval += img[i][j]
+        return medval
+
+def check_limit(medval,limit):
+        if (medval>limit):
+                return 1
+        else:
+                return 0
+
+def med_filter(img):
+        
+        for i in range(len(img)-6):
+
+                #Initial median value for every new row
+                medval = init_space(img,i)
+                img[i+3][3] = check_limit(medval,limit)
+                
+                for j in range(1,len(img[0])-6):
+                        for k in range(7):
+                                medval = medval + img[i+k][j+6] - img[i+k][j-1]
+
+                        img[i+3][j+3] = check_limit(medval,limit)
+        return img
+    
 # Morphological filtering
 
 # s = [[0, 1, 0], [1, 1, 1], [0, 1, 0]]
@@ -161,7 +193,9 @@ def recognize(img):
 	plot(img, 0)
 	img = to_skin_pixels(img)
 	plot(img, 1)
-	img = morph_closing(img)
+        img = med_filter(img)
+        plot(img, 1)
+        img = morph_closing(img)
 	plot(img, 1)
 	img = ccl(img)
 	plot(img, 1)
