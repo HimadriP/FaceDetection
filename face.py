@@ -112,7 +112,7 @@ def get_n(img, x, y):
 				continue
 			if _j<0 or _j>=len(img[0]):
 				continue
-			n = n + img[_i][_j]*s[_si][_sj]
+			n = n + img[_i][_j]&s[_si][_sj]
 	return n
 
 def check(img, i, j):
@@ -140,6 +140,7 @@ def erode(img):
 			if r == FIT:
 				ero[i][j] = 1
 	return ero
+
 
 def morph_closing(img):
 	img = dilate(img)
