@@ -11,6 +11,7 @@ def median_filter(i_img, i_clk, o_img):
 			for j in range(7):
 				window += i_img[i][j]
 
+                        
 	def get_column(i, j):
 		global i_img
 		x = 0
@@ -26,7 +27,7 @@ def median_filter(i_img, i_clk, o_img):
 				window = window - get_column(i-2) + get_column(i+3)
 				if window > (7*7)>>2:
 					img.next[i][j] = 1
-				else
+				else:
 					img.next[i][j] = 0
 
 	@always_comb
