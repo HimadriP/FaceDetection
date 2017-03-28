@@ -15,6 +15,7 @@ def contrast_correction(i_r, i_g, i_b, i_clk, o_r, o_g, o_b):
 
 	@always_comb
 	def run():
+		delay(2)
 		red.next = contrast_correct(i_r)
 		gre.next = contrast_correct(i_g)
 		blu.next = contrast_correct(i_b)
@@ -24,5 +25,6 @@ def contrast_correction(i_r, i_g, i_b, i_clk, o_r, o_g, o_b):
 		o_r.next = red.next
 		o_g.next = gre.next
 		o_b.next = blu.next
-                print o_r.next,o_g.next,o_b.next 
+        # print o_r.next,o_g.next,o_b.next 
+
 	return run, outputs

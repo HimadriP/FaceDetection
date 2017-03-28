@@ -21,5 +21,5 @@ def brightness_increement(i_r, i_g, i_b, i_brightness, i_clk, o_r, o_g, o_b):
 		o_r.next = red.next
 		o_g.next = gre.next
 		o_b.next = blu.next
-                print o_r.next,o_g.next,o_b.next
+                # print o_r.next,o_g.next,o_b.next
 	return run, outputs
