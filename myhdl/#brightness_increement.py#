@@ -7,7 +7,7 @@ def brightness_increement(i_r, i_g, i_b, i_brightness, i_clk, o_r, o_g, o_b):
 
 	def truncate(x):
 		if x>255:
-		        return 255
+			x = 255
 		return x
 
 	@always(i_clk.posedge)
