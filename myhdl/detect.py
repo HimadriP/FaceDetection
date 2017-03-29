@@ -46,10 +46,10 @@ def channel_in(clk):
     skin_channel       = [[None for i in range(len(img[0]))] for j in range(len(img))]
     for i in range(len(img)):
         for j in range(len(img[0])):
-            brightness_channel[i][j] = brightness_increement(img_o[i][j][0], img_o[i][j][1], img_o[i][j][2], BRIGHTNESS, clk, img_b[i][j][0], img_b[i][j][1], img_b[i][j][2])
-            contrast_channel[i][j]   = contrast_correction  (img_b[i][j][0], img_b[i][j][1], img_b[i][j][2], clk, img_c[i][j][0], img_c[i][j][1], img_c[i][j][2])
-            ycbcr_channel[i][j]      = rgb_to_ycbcr         (img_c[i][j][0], img_c[i][j][1], img_c[i][j][2], clk, img_y[i][j][0], img_y[i][j][1], img_y[i][j][2])
-            skin_channel[i][j]       = skin_threshold       (img_y[i][j][0], img_y[i][j][1], img_y[i][j][2], clk, img_s[i][j])
+            brightness_channel[i][j] = toVHDL(brightness_increement,img_o[i][j][0], img_o[i][j][1], img_o[i][j][2], BRIGHTNESS, clk, img_b[i][j][0], img_b[i][j][1], img_b[i][j][2])
+            contrast_channel[i][j]   = toVHDL(contrast_correction  ,img_b[i][j][0], img_b[i][j][1], img_b[i][j][2], clk, img_c[i][j][0], img_c[i][j][1], img_c[i][j][2])
+            ycbcr_channel[i][j]      = toVHDL(rgb_to_ycbcr         ,img_c[i][j][0], img_c[i][j][1], img_c[i][j][2], clk, img_y[i][j][0], img_y[i][j][1], img_y[i][j][2])
+            skin_channel[i][j]       = toVHDL(skin_threshold       ,img_y[i][j][0], img_y[i][j][1], img_y[i][j][2], clk, img_s[i][j])
     return instances()
 
 cin = channel_in(clk)
