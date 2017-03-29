@@ -18,7 +18,7 @@ def clkDriver(clk):
 
     return driverclk
 
-clk = Signal(0)
+clk = Signal(intbv(0)[8:])
 clkin = clkDriver(clk)
 
 img = imread('../faces3.jpg')
@@ -26,7 +26,7 @@ width = 64
 ar = 1.0*len(img[0])/len(img)
 img = imresize(img, (int(width/ar), width))
 
-BRIGHTNESS = Signal(intbv(20))
+BRIGHTNESS = Signal(intbv(20)[8:])
 
 # Convert img to Singal intbv
 img_o = [ [ [ Signal(intbv(0)[8:]) for k in range(3) ] for i in range(len(img[0]))] for j in range(len(img))]
@@ -53,5 +53,13 @@ def channel_in(clk):
     return instances()
 
 cin = channel_in(clk)
-sim = Simulation(clkin,cin)
-sim.run(100)
+#sim = Simulation(clkin,cin)
+#sim.run(100)
+
+#Converting to VHDL
+
+clkD = toVHDL(clkDriver,clk)
+BI = toVHDL(brightness_increement,img_o[0][0][0], img_o[0][0][1], img_o[0][0][2], BRIGHTNESS, clk, img_b[0][0][0], img_b[0][0][1], img_b[0][0][2])
+cc = toVHDL(contrast_correction,img_b[0][0][0], img_b[0][0][1], img_b[0][0][2], clk, img_c[0][0][0], img_c[0][0][1], img_c[0][0][2])
+ycbcr = toVHDL(rgb_to_ycbcr,img_c[0][0][0], img_c[0][0][1], img_c[0][0][2], clk, img_y[0][0][0], img_y[0][0][1], img_y[0][0][2])
+skin = toVHDL(skin_threshold,img_y[0][0][0], img_y[0][0][1], img_y[0][0][2], clk, img_s[0][0])
