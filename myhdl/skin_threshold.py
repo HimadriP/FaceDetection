@@ -11,7 +11,7 @@ def skin_threshold(i_y, i_cb, i_cr, i_clk, o_s):
 			skin_pixel.next = 1
 		else: 
 			skin_pixel.next = 0
-		#print(skin_pixel.next)
+	        print(skin_pixel.next)
 
 	@always_comb
 	def outputs():

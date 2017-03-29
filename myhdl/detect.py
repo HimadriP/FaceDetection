@@ -34,30 +34,39 @@ img_b = [ [ [ Signal(intbv(0)[8:]) for k in range(3) ] for i in range(len(img[0]
 img_c = [ [ [ Signal(intbv(0)[8:]) for k in range(3) ] for i in range(len(img[0]))] for j in range(len(img))]
 img_y = [ [ [ Signal(intbv(0)[8:]) for k in range(3) ] for i in range(len(img[0]))] for j in range(len(img))]
 img_s = [ [   Signal(intbv(0)[1:]) for i in range(len(img[0]))] for j in range(len(img))]
+
+#output of median filter
+img_m = [ [   Signal(intbv(0)[1:]) for i in range(len(img[0]))] for j in range(len(img))]
+
 for i in range(len(img)):
     for j in range(len(img[0])):
         for k in range(3):
             img_o[i][j][k] = Signal(intbv(int(img[i][j][k]))[8:])
 
 def channel_in(clk):
+    
     brightness_channel = [[None for i in range(len(img[0]))] for j in range(len(img))]
     contrast_channel   = [[None for i in range(len(img[0]))] for j in range(len(img))]
     ycbcr_channel      = [[None for i in range(len(img[0]))] for j in range(len(img))]
     skin_channel       = [[None for i in range(len(img[0]))] for j in range(len(img))]
+
     for i in range(len(img)):
         for j in range(len(img[0])):
             brightness_channel[i][j] = brightness_increement(img_o[i][j][0], img_o[i][j][1], img_o[i][j][2], BRIGHTNESS, clk, img_b[i][j][0], img_b[i][j][1], img_b[i][j][2])
             contrast_channel[i][j]   = contrast_correction  (img_b[i][j][0], img_b[i][j][1], img_b[i][j][2], clk, img_c[i][j][0], img_c[i][j][1], img_c[i][j][2])
             ycbcr_channel[i][j]      = rgb_to_ycbcr         (img_c[i][j][0], img_c[i][j][1], img_c[i][j][2], clk, img_y[i][j][0], img_y[i][j][1], img_y[i][j][2])
             skin_channel[i][j]       = skin_threshold       (img_y[i][j][0], img_y[i][j][1], img_y[i][j][2], clk, img_s[i][j])
+
+    med_fil = median_filter(img_s,clk,img_m)
     return instances()
 
 cin = channel_in(clk)
-#sim = Simulation(clkin,cin)
-#sim.run(100)
+sim = Simulation(clkin,cin)
+sim.run(100)
 
 #Converting to VHDL
 
+#ch = toVHDL(channel_in,clk)
 clkD = toVHDL(clkDriver,clk)
 BI = toVHDL(brightness_increement,img_o[0][0][0], img_o[0][0][1], img_o[0][0][2], BRIGHTNESS, clk, img_b[0][0][0], img_b[0][0][1], img_b[0][0][2])
 cc = toVHDL(contrast_correction,img_b[0][0][0], img_b[0][0][1], img_b[0][0][2], clk, img_c[0][0][0], img_c[0][0][1], img_c[0][0][2])
