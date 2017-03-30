@@ -18,7 +18,7 @@ img = cam.get_image()
 pygame.image.save(img, 'image.jpg')
 
 img = imread('image.jpg')
-width = 480
+width = 64
 ar = 1.0*len(img[0])/len(img)
 img = imresize(img, (int(width/ar), width))
 

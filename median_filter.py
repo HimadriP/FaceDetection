@@ -25,14 +25,13 @@ def median_filter(i_img, i_clk, o_img):
 		delay(8)
 		for i in range(2, len(i_img)-2):
 			for  j in range(2, len(i_img[0])-2):
+                                
 				window = window - get_column(i-2) + get_column(i+3)
 				if window > (7*7)>>2:
 					img.next[i][j] = 1
 				else:
 					img.next[i][j] = 0
-
-	@always_comb
-	def outputs():
-		o_imig = img
+                                i_img[i][j] = img.next[i][j]
+                                o_img[i][j] = img.next[i][j]
 
 	return median_filter
