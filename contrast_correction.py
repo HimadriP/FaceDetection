@@ -13,7 +13,7 @@ def contrast_correction(i_r, i_g, i_b, i_clk, o_r, o_g, o_b):
 			return 255
 		return (p+(p>>2))-32
 
-	@always_comb
+	@always(i_clk.posedge)
 	def run():
 		delay(2)
 		red.next = contrast_correct(i_r)

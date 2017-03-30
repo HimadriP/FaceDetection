@@ -22,6 +22,7 @@ def median_filter(i_img, i_clk, o_img):
 	@always(i_clk.posedge)
 	def median_filter():
 		global i_img, o_img
+		delay(8)
 		for i in range(2, len(i_img)-2):
 			for  j in range(2, len(i_img[0])-2):
 				window = window - get_column(i-2) + get_column(i+3)

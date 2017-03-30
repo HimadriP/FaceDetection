@@ -1,6 +1,6 @@
 from scipy.misc import imread, imsave, imresize
 import numpy as np
-import Queue as Q
+# import Queue as Q
 import matplotlib.pyplot as plt
 
 def plot(img, v=0):
@@ -11,7 +11,6 @@ def plot(img, v=0):
 	plt.show()
 
 # Color correction
-
 BRIGHTNESS = 0
 
 def brightness_increement(img, brightness):
@@ -112,7 +111,7 @@ def get_n(img, x, y):
 				continue
 			if _j<0 or _j>=len(img[0]):
 				continue
-			n = n + img[_i][_j]&s[_si][_sj]
+			n = n + img[_i][_j]*s[_si][_sj]
 	return n
 
 def check(img, i, j):
@@ -144,7 +143,6 @@ def erode(img):
 
 def morph_closing(img):
 	img = dilate(img)
-	plot(img, 1)
 	img = erode(img)
 	return img
 
@@ -155,11 +153,11 @@ dy = [-1,  0, 0, 1]
 
 def flood_fill(img, i, j, l):
 	global dx, dy
-	q = Q.Queue()
-	q.put((i, j))
+	q = []
+	q.append((i, j))
 	c = img[i][j]
-	while not q.empty():
-		x, y = q.get()
+	while not len(q):
+		# x, y = q.pop(0)
 		if img[x][y] != c:
 			continue
 		img[x][y] = l
@@ -186,25 +184,27 @@ def ccl(img):
 # Face Recognition
 
 def recognize(img):
+	plot(img	)
 	img = brightness_increement(img, BRIGHTNESS)
-	plot(img)
+	# plot(img)
 	img = contrast_correction(img)
-	plot(img)
+	# plot(img)
 	img = to_ycbcr(img)
-	plot(img, 0)
+	# plot(img, 0)
 	img = to_skin_pixels(img)
-	plot(img, 1)
-        img = med_filter(img)
-        plot(img, 1)
-        img = morph_closing(img)
-	plot(img, 1)
+	# plot(img, 1)
+	img = med_filter(img)
+	# plot(img, 1)
+	img = morph_closing(img)
+	# plot(img, 1)
 	img = ccl(img)
 	plot(img, 1)
 	return img
 
-img = imread('faces3.jpg')
-width = 64
-ar = 1.0*len(img[0])/len(img)
-img = imresize(img, (int(width/ar), width))
 
-img = recognize(img)
+	# img = imread()
+	# width = 64
+	# ar = 1.0*len(img[0])/len(img)
+	# img = imresize(img, (int(width/ar), width))
+
+	# img = recognize(img)
